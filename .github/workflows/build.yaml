@@ -1,0 +1,34 @@
+name: Main branch build
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: 
+          - ubuntu-latest
+          #- macos-latest
+          #- windows-latest
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Install Ninja
+        run: sudo apt-get install ninja-build
+      - uses: actions/checkout@v2
+        with:
+          repository: llvm/llvm-project
+      - uses: actions/checkout@v2
+        with:
+          path: clang-tools-extra/module-dumper
+      - name: Patch tools' CMake
+        run: echo 'add_subdirectory(module-dumper)' >> clang-tools-extra/CMakeLists.txt
+      - uses: m4c0/gha-simple-cmake@c6871761e29e335d2ddd2325f78a29acaf7ef5d6
+        with:
+          config: Release
+          source_dir: llvm
+          extra_configure_flags: -G Ninja -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DLLVM_BUILD_TESTS=ON
+      - uses: actions/upload-artifact@v2
+        with:
+          name: module-dumper-${{matrix.os}}
+          path: build/bin/module-dumper
+        
+
