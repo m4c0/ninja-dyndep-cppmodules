@@ -42,11 +42,12 @@ There are some limitations as well:
 
 This can be build by:
 
-1. Clone LLVM
-2. Clone this repo inside `clang-tool-extras`
-3. Add `add_subdirectory(module-dumper)` to `clang-tool-extras/CMakeLists.txt`
-4. Follow [LLVM's instructions][build-llvm] to build `module-dumper`
+1. Download and install LLVM. If you are using package managers, make sure it contains all LLVM/clang headers as well
+2. Clone this repo
+3. Call CMake - ex: `cmake -S . -B build -DLLVM_DIR=/opt/llvm`
+4. Build - ex: `cmake --build build`
 
-[build-llvm]: https://clang.llvm.org/docs/LibASTMatchersTutorial.html
+This will build the standalone tool. You won't need LLVM/Clang headers to use it, but you still need LLVM/Clang dynamic libraries.
+
 [ninja-dyndep]: https://ninja-build.org/manual.html#ref_dyndep
 
